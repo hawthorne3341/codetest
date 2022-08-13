@@ -1,6 +1,6 @@
 NAME=codetest
 CC=g++
-CFLAGS=-g -Wall -Wno-write-strings -I$(IDIR)
+CFLAGS=-g -Wno-write-strings -I$(IDIR)
 LDFLAGS=-lncurses
 SRC=src
 OBJ=obj
