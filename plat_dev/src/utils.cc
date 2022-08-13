@@ -4,6 +4,7 @@
 #include<chrono>
 #include<functional>
 #include<unistd.h>
+#include "anims.h"
 
 using namespace std;
 
@@ -12,13 +13,13 @@ void placeholder(void) {
 }
 
 std::function<void(void)> anims[] = {
+	&show_sl,
+	&placeholder,
 	&placeholder
 };
 
-//const size_t NUM_ANIMS = sizeof anims / sizeof anims[0];
+const size_t NUM_ANIMS = sizeof anims / sizeof anims[0];
 
-// temporarily hardcoding value for unit testing purposes
-const size_t NUM_ANIMS = 3;
 
 extern int get_random_index()
 {
@@ -73,6 +74,7 @@ extern int parse_index(int argc, char **argv)
 extern std::function<void(void)> get_anim(int anim_index)
 {
 	if (anim_index == -1) anim_index = get_random_index();
+
 	return anims[anim_index];
 }
 

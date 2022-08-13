@@ -36,6 +36,7 @@
 /* sl version 1.00 : SL runs vomitting out smoke.                            */
 /*                                              by Toyoda Masashi 1992/12/11 */
 
+#include <stdlib.h>
 #include <curses.h>
 #include <signal.h>
 #include <unistd.h>
@@ -43,16 +44,11 @@
 
 void add_smoke(int y, int x);
 void add_man(int y, int x);
-int add_C51(int x);
-int add_D51(int x);
-int add_sl(int x);
+int add_C51(int x, int fly, int accident);
+int add_D51(int x, int fly, int accident);
+int add_sl(int x, int fly, int accident);
 void option(char *str);
 int my_mvaddstr(int y, int x, char *str);
-
-int ACCIDENT  = 0;
-int LOGO      = 0;
-int FLY       = 0;
-int C51       = 0;
 
 int my_mvaddstr(int y, int x, char *str)
 {
@@ -63,30 +59,15 @@ int my_mvaddstr(int y, int x, char *str)
     return OK;
 }
 
-void option(char *str)
+extern void show_sl(void)
 {
-    extern int ACCIDENT, FLY, LONG;
+//    still figuring out parameters to this function
+//    int accident, int fly, int logo, int c51
 
-    while (*str != '\0') {
-        switch (*str++) {
-            case 'a': ACCIDENT = 1; break;
-            case 'F': FLY      = 1; break;
-            case 'l': LOGO     = 1; break;
-            case 'c': C51      = 1; break;
-            default:                break;
-        }
-    }
-}
-
-int main(int argc, char *argv[])
-{
     int x, i;
+    int accident, fly, logo, C51;
+    accident = fly = logo = C51 = 0;
 
-    for (i = 1; i < argc; ++i) {
-        if (*argv[i] == '-') {
-            option(argv[i] + 1);
-        }
-    }
     initscr();
     signal(SIGINT, SIG_IGN);
     noecho();
@@ -96,25 +77,27 @@ int main(int argc, char *argv[])
     scrollok(stdscr, FALSE);
 
     for (x = COLS - 1; ; --x) {
-        if (LOGO == 1) {
-            if (add_sl(x) == ERR) break;
+        if (logo == 1) {
+            if (add_sl(x, fly, accident) == ERR) break;
         }
         else if (C51 == 1) {
-            if (add_C51(x) == ERR) break;
+            if (add_C51(x, fly, accident) == ERR) break;
         }
         else {
-            if (add_D51(x) == ERR) break;
+            if (add_D51(x, fly, accident) == ERR) break;
         }
         getch();
         refresh();
+	// changed to save time debugging
         usleep(20000);
     }
     mvcur(0, COLS - 1, LINES - 1, 0);
     endwin();
+    exit(0);
 }
 
 
-int add_sl(int x)
+int add_sl(int x, int fly, int accident)
 {
     static char *sl[LOGOPATTERNS][LOGOHIGHT + 1]
         = {{LOGO1, LOGO2, LOGO3, LOGO4, LWHL11, LWHL12, DELLN},
@@ -135,7 +118,7 @@ int add_sl(int x)
     if (x < - LOGOLENGTH)  return ERR;
     y = LINES / 2 - 3;
 
-    if (FLY == 1) {
+    if (fly == 1) {
         y = (x / 6) + LINES - (COLS / 6) - LOGOHIGHT;
         py1 = 2;  py2 = 4;  py3 = 6;
     }
@@ -145,7 +128,7 @@ int add_sl(int x)
         my_mvaddstr(y + i + py2, x + 42, car[i]);
         my_mvaddstr(y + i + py3, x + 63, car[i]);
     }
-    if (ACCIDENT == 1) {
+    if (accident == 1) {
         add_man(y + 1, x + 14);
         add_man(y + 1 + py2, x + 45);  add_man(y + 1 + py2, x + 53);
         add_man(y + 1 + py3, x + 66);  add_man(y + 1 + py3, x + 74);
@@ -155,7 +138,7 @@ int add_sl(int x)
 }
 
 
-int add_D51(int x)
+int add_D51(int x, int fly, int accident)
 {
     static char *d51[D51PATTERNS][D51HIGHT + 1]
         = {{D51STR1, D51STR2, D51STR3, D51STR4, D51STR5, D51STR6, D51STR7,
@@ -179,7 +162,7 @@ int add_D51(int x)
     if (x < - D51LENGTH)  return ERR;
     y = LINES / 2 - 5;
 
-    if (FLY == 1) {
+    if (fly == 1) {
         y = (x / 7) + LINES - (COLS / 7) - D51HIGHT;
         dy = 1;
     }
@@ -187,7 +170,7 @@ int add_D51(int x)
         my_mvaddstr(y + i, x, d51[(D51LENGTH + x) % D51PATTERNS][i]);
         my_mvaddstr(y + i + dy, x + 53, coal[i]);
     }
-    if (ACCIDENT == 1) {
+    if (accident == 1) {
         add_man(y + 2, x + 43);
         add_man(y + 2, x + 47);
     }
@@ -195,7 +178,7 @@ int add_D51(int x)
     return OK;
 }
 
-int add_C51(int x)
+int add_C51(int x, int fly, int accident)
 {
     static char *c51[C51PATTERNS][C51HIGHT + 1]
         = {{C51STR1, C51STR2, C51STR3, C51STR4, C51STR5, C51STR6, C51STR7,
@@ -219,7 +202,7 @@ int add_C51(int x)
     if (x < - C51LENGTH)  return ERR;
     y = LINES / 2 - 5;
 
-    if (FLY == 1) {
+    if (fly == 1) {
         y = (x / 7) + LINES - (COLS / 7) - C51HIGHT;
         dy = 1;
     }
@@ -227,7 +210,7 @@ int add_C51(int x)
         my_mvaddstr(y + i, x, c51[(C51LENGTH + x) % C51PATTERNS][i]);
         my_mvaddstr(y + i + dy, x + 55, coal[i]);
     }
-    if (ACCIDENT == 1) {
+    if (accident == 1) {
         add_man(y + 3, x + 45);
         add_man(y + 3, x + 49);
     }
