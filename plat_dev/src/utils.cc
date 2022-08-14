@@ -14,14 +14,14 @@ void placeholder(void) {
 
 std::function<void(void)> anims[] = {
 	&show_sl,
-	&placeholder,
+	&show_ducks,
 	&placeholder
 };
 
 const size_t NUM_ANIMS = sizeof anims / sizeof anims[0];
 
 
-extern int get_random_index()
+extern int get_random()
 {
 	return std::bind(std::uniform_int_distribution<int>(0, NUM_ANIMS - 1), mt19937(chrono::high_resolution_clock::now().time_since_epoch().count()))(); 
 }
@@ -39,20 +39,15 @@ extern int parse_index(int argc, char **argv)
 				anim_index = optarg;
 				break;
 			case '?':
-				if (optopt == 'n') {
+				if (optopt == 'n')
 					fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-					exit(1);
-				}
-				else if (isprint(optopt)) {
+				else if (isprint(optopt))
 					fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-					exit(1);
-				}
-				else {
+				else
 					fprintf(stderr,
 						"Unknown option character `\\x%x'.\n",
 					optopt);
-					exit(1);
-				}
+				exit(1);
 			default:
 				abort();
 		}
@@ -73,7 +68,7 @@ extern int parse_index(int argc, char **argv)
 
 extern std::function<void(void)> get_anim(int anim_index)
 {
-	if (anim_index == -1) anim_index = get_random_index();
+	if (anim_index == -1) anim_index = get_random();
 
 	return anims[anim_index];
 }

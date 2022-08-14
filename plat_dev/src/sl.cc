@@ -41,13 +41,13 @@
 #include <signal.h>
 #include <unistd.h>
 #include "sl.h"
+#include "utils.h"
 
 void add_smoke(int y, int x);
 void add_man(int y, int x);
 int add_C51(int x, int fly, int accident);
 int add_D51(int x, int fly, int accident);
 int add_sl(int x, int fly, int accident);
-void option(char *str);
 int my_mvaddstr(int y, int x, char *str);
 
 int my_mvaddstr(int y, int x, char *str)
@@ -61,12 +61,15 @@ int my_mvaddstr(int y, int x, char *str)
 
 extern void show_sl(void)
 {
-//    still figuring out parameters to this function
-//    int accident, int fly, int logo, int c51
 
-    int x, i;
-    int accident, fly, logo, C51;
-    accident = fly = logo = C51 = 0;
+    int x, i, accident, fly, logo, C51;
+
+    // randomizing these in order to keep the interface between animations consistent
+    // in the interest of time, in order to focus on my own animations
+    accident = get_random();
+    fly = get_random();
+    logo = get_random();
+    C51 = get_random();
 
     initscr();
     signal(SIGINT, SIG_IGN);
@@ -88,7 +91,7 @@ extern void show_sl(void)
         }
         getch();
         refresh();
-	// changed to save time debugging
+	// changed to save time experimenting
         usleep(20000);
     }
     mvcur(0, COLS - 1, LINES - 1, 0);
