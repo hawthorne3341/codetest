@@ -17,15 +17,18 @@ TEST_BIN=unit_tests
 
 all: $(BIN)
 
-$(BIN): $(OBJS) $(IDIR)
+$(BIN): $(BINDIR) $(OBJ) $(OBJS) $(IDIR)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
-
-$(OBJ)/%.o: $(SRC)/%.cc $(SRC)/%.h
-	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ)/%.o: $(SRC)/%.cc
 	$(CC) $(CFLAGS) -c $< -o $@
-	
+
+$(BINDIR):
+	mkdir $@
+
+$(OBJ):
+	mkdir $@
+
 .PHONY: test
 test: LDFLAGS+=-lcriterion
 test:
