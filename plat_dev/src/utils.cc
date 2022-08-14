@@ -8,22 +8,18 @@
 
 using namespace std;
 
-void placeholder(void) {
-	cout << "placeholder" << endl;
-}
-
 std::function<void(void)> anims[] = {
 	&show_sl,
 	&show_ducks,
-	&placeholder
+	&show_bears
 };
 
 const size_t NUM_ANIMS = sizeof anims / sizeof anims[0];
 
 
-extern int get_random()
+extern int get_random(int upper_bound)
 {
-	return std::bind(std::uniform_int_distribution<int>(0, NUM_ANIMS - 1), mt19937(chrono::high_resolution_clock::now().time_since_epoch().count()))(); 
+	return std::bind(std::uniform_int_distribution<int>(0, upper_bound), mt19937(chrono::high_resolution_clock::now().time_since_epoch().count()))(); 
 }
 
 extern int parse_index(int argc, char **argv)
@@ -68,7 +64,7 @@ extern int parse_index(int argc, char **argv)
 
 extern std::function<void(void)> get_anim(int anim_index)
 {
-	if (anim_index == -1) anim_index = get_random();
+	if (anim_index == -1) anim_index = get_random(NUM_ANIMS - 1);
 
 	return anims[anim_index];
 }

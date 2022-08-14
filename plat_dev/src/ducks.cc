@@ -8,6 +8,7 @@
 extern void show_ducks(void) {
     initscr();
     cbreak();
+    curs_set(0);
     noecho();
 
     static char *ducks_anim[NUM_SCENES][SCENE_HEIGHT]
@@ -37,9 +38,9 @@ extern void show_ducks(void) {
     	    for (; i < SCENE_HEIGHT; i++) {
     		mvwprintw(duckswin, i, 0, ducks_anim[j][i]);
     	        wrefresh(duckswin);	
+		usleep(DUCK_PACE);
     	    }	
     	    i = 0;
-	    usleep(DUCK_SLEEP);
     	}
     } while((wc=wgetch(duckswin))!=QUIT_KEY); 
 

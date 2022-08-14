@@ -7,6 +7,9 @@
  *========================================
  */
 
+#ifndef SL_H
+#define SL_H
+
 #define D51HIGHT	10
 #define D51FUNNEL	 7
 #define D51LENGTH	83
@@ -148,3 +151,8 @@
 #define C51WH12 "------'|oOo|=[]=-      ||      ||      |  ||=======_|__"
 #define C51WH13 "/~\\____|___|/~\\_|  O=======O=======O   |__|+-/~\\_|     "
 #define C51WH14 "\\_/         \\_/  \\____/  \\____/  \\____/      \\_/       "
+
+int my_mvaddstr(int y, int x, char *str);
+int my_mvwaddstr(WINDOW* win, int y, int x, char *str);
+
+#endif

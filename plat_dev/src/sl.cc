@@ -49,13 +49,23 @@ int add_C51(int x, int fly, int accident);
 int add_D51(int x, int fly, int accident);
 int add_sl(int x, int fly, int accident);
 int my_mvaddstr(int y, int x, char *str);
+int my_mvwaddstr(WINDOW* win, int y, int x, char *str);
 
-int my_mvaddstr(int y, int x, char *str)
+extern int my_mvaddstr(int y, int x, char *str)
 {
     for ( ; x < 0; ++x, ++str)
         if (*str == '\0')  return ERR;
     for ( ; *str != '\0'; ++str, ++x)
         if (mvaddch(y, x, *str) == ERR)  return ERR;
+    return OK;
+}
+
+extern int my_mvwaddstr(WINDOW* win, int y, int x, char *str)
+{
+    for ( ; x < 0; ++x, ++str)
+        if (*str == '\0')  return ERR;
+    for ( ; *str != '\0'; ++str, ++x)
+        if (mvwaddch(win, y, x, *str) == ERR)  return ERR;
     return OK;
 }
 
@@ -66,10 +76,10 @@ extern void show_sl(void)
 
     // randomizing these in order to keep the interface between animations consistent
     // in the interest of time, in order to focus on my own animations
-    accident = get_random();
-    fly = get_random();
-    logo = get_random();
-    C51 = get_random();
+    accident = get_random(1);
+    fly = get_random(1);
+    logo = get_random(1);
+    C51 = get_random(1);
 
     initscr();
     signal(SIGINT, SIG_IGN);

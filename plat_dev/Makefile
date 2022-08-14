@@ -1,6 +1,6 @@
-NAME=codetest
+NAME=mysl
 CC=g++
-CFLAGS=-g -Wno-write-strings -I$(IDIR)
+CFLAGS=-g -Wno-format-security -Wno-write-strings -I$(IDIR)
 LDFLAGS=-lncurses
 SRC=src
 OBJ=obj
@@ -17,7 +17,7 @@ TEST_BIN=unit_tests
 
 all: $(BIN)
 
-$(BIN): $(OBJS)
+$(BIN): $(OBJS) $(IDIR)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.cc $(SRC)/%.h

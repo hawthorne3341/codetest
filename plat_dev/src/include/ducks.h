@@ -3,7 +3,8 @@
 
 #define QUIT_KEY 'q'
 
-#define DUCK_SLEEP 75000
+#define DUCK_PACE 20000
+#define DUCK_SLEEP 40000
 
 #define NUM_SCENES	9
 #define SCENE_HEIGHT	8
