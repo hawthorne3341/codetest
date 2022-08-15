@@ -1,9 +1,10 @@
+#include<fstream>
 #include<criterion/criterion.h>
 #include "utils.h"
 
 #define BIN_PATH "./bin/codetest"
 
-Test(cli_tests, n_flag_in_range) {
+Test(n_flag_tests, n_flag_in_range) {
 	int argc = 3;
 	char **argv = new char *[argc];
 	
@@ -16,7 +17,7 @@ Test(cli_tests, n_flag_in_range) {
 	delete[] argv;
 }
 
-Test(cli_tests, n_flag_outside_range) {
+Test(n_flag_tests, n_flag_outside_range) {
 	int argc = 3;
 	char **argv = new char *[argc];
 	
@@ -30,7 +31,7 @@ Test(cli_tests, n_flag_outside_range) {
 	delete[] argv;
 }
 
-Test(cli_tests, no_n_flag) {
+Test(n_flag_tests, no_n_flag) {
 	int argc = 1;
 	char **argv = new char *[argc];
 	
@@ -41,7 +42,21 @@ Test(cli_tests, no_n_flag) {
 	delete[] argv;
 }
 
-Test(cli_tests, n_without_option, .exit_code = 1) {
+Test(w_flag_tests, w_creates_file) {
+	int argc = 2;
+	char **argv = new char *[argc];
+	
+	argv[0] = (char *)BIN_PATH;
+	argv[1] = (char *)"-w";
+
+	save_art(0);
+        std::ifstream created_file("0.txt");
+
+	cr_expect(created_file.is_open(), "File created successfully");
+	delete[] argv;
+}
+
+Test(malformed_tests, n_without_option, .exit_code = 1) {
 	int argc = 2;
 	char **argv = new char *[argc];
 	
@@ -53,7 +68,7 @@ Test(cli_tests, n_without_option, .exit_code = 1) {
 	delete[] argv;
 }
 
-Test(cli_tests, unknown_flag, .exit_code = 1) {
+Test(malformed_tests, unknown_flag, .exit_code = 1) {
 	int argc = 2;
 	char **argv = new char *[argc];
 	
@@ -65,7 +80,7 @@ Test(cli_tests, unknown_flag, .exit_code = 1) {
 	delete[] argv;
 }
 
-Test(cli_tests, unknown_character, .exit_code = 1) {
+Test(malformed_tests, unknown_character, .exit_code = 1) {
 	int argc = 3;
 	char **argv = new char *[argc];
 	

@@ -36,5 +36,5 @@ test:
 	-./$(TEST_BIN)
 
 clean:
-	$(RM) -r $(BINDIR)/* $(OBJ)/* $(TEST_BIN)
+	$(RM) -r $(BINDIR)/* $(OBJ)/* $(TEST_BIN) *.txt
 
